@@ -21,37 +21,23 @@ public partial class PragatidbContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
+    public virtual DbSet<Course> Courses { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=tcp:newdb1.database.windows.net,1433;Initial Catalog=pragatidb;Persist Security Info=False;User ID=sqladmin;Password=Welcome@1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Department>(entity =>
+        modelBuilder.Entity<Course>(entity =>
         {
-            entity.HasKey(e => e.DepartmentId).HasName("PK__Departme__B2079BED5FAE748B");
+            entity.HasKey(e => e.CourseId).HasName("PK__Courses__C92D71A79632B2F6");
 
-            entity.Property(e => e.Name).HasMaxLength(100);
-        });
-
-        modelBuilder.Entity<Employee>(entity =>
-        {
-            entity.HasKey(e => e.EmployeeId).HasName("PK__Employee__7AD04F1136237697");
-
-            entity.HasIndex(e => e.Email, "UQ__Employee__A9D10534C42398C2").IsUnique();
-
-            entity.Property(e => e.Email).HasMaxLength(100);
-            entity.Property(e => e.Name).HasMaxLength(100);
-            entity.Property(e => e.Salary).HasColumnType("decimal(10, 2)");
-
-            entity.HasOne(d => d.Department).WithMany(p => p.Employees)
-                .HasForeignKey(d => d.DepartmentId)
-                .HasConstraintName("FK__Employees__Depar__6383C8BA");
-        });
-
-        modelBuilder.Entity<Product>(entity =>
-        {
-            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.CourseFee).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.CourseName)
+                .HasMaxLength(200)
+                .IsUnicode(false);
         });
 
         OnModelCreatingPartial(modelBuilder);
