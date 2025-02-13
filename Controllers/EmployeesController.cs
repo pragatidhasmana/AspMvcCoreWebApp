@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AspMvcCoreWebApp.Models;
@@ -47,7 +43,7 @@ namespace AspMvcCoreWebApp.Controllers
         // GET: Employees/Create
         public IActionResult Create()
         {
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentId");
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name");
             return View();
         }
 
@@ -57,15 +53,12 @@ namespace AspMvcCoreWebApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EmployeeId,Name,Email,Salary,DepartmentId")] Employee employee)
-        {
-            if (ModelState.IsValid)
-            {
+        {           
+            
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentId", employee.DepartmentId);
-            return View(employee);
+            
         }
 
         // GET: Employees/Edit/5
@@ -97,8 +90,7 @@ namespace AspMvcCoreWebApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
+            
                 try
                 {
                     _context.Update(employee);
@@ -115,10 +107,9 @@ namespace AspMvcCoreWebApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentId", employee.DepartmentId);
-            return View(employee);
+                return RedirectToAction(nameof(Index));        
+            
+            
         }
 
         // GET: Employees/Delete/5
